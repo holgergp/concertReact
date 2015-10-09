@@ -10,13 +10,17 @@ let yeomanImage = require('../images/yeoman.png');
 var Concert = React.createClass({
   render: function () {
     return (
-      <div className="col-md-12 btn btn-xs">
+      <div className="col-md-12 btn btn-xs" style={{cursor: 'pointer'}}>
         <div className="col-md-10 col-lg-10 col-sm-10 btn btn-xs bg-warning">
           {this.props.concert.band}
-          -
+         &nbsp;-&nbsp;
           {this.props.concert.venue}
-          -
+          &nbsp;-&nbsp;
           {this.props.concert.date}
+        </div>
+        <div class="col-md-2 col-lg-2 col-sm-2">
+          <button className="btn btn-xs btn-danger glyphicon glyphicon-remove"
+                  ></button>
         </div>
       </div>
     );
@@ -63,9 +67,31 @@ var ConcertLists = React.createClass({
 var NewConcertForm = React.createClass({
   render: function () {
     return (
-      <form>
-        <input type="text" placeholder="New Concert..."/>
-      </form>
+      <div className="row">
+        <div className="col-md-9">
+          <form name="addConcertForm" noValidate className="form-inline" role="form">
+            <div className="form-group">
+              <label className="sr-only">Artist</label>
+              <input type="text" name="artist"  placeholder="Künstler"
+                     required/>
+              </div>
+              <div className="form-group">
+                <label className="sr-only">Ort</label>
+                <input type="text" name="venue"  placeholder="Ort" required/>
+                </div>
+                <div className="form-group">
+                  <label className="sr-only">Datum</label>
+                  <input type="datetime" name="date" placeholder="Datum" required/>
+                  </div>
+                  <button
+                          className="btn btn-success glyphicon glyphicon-plus"
+                          type="submit"></button>
+                </form>
+              </div>
+
+            </div>
+
+
     );
   }
 });
