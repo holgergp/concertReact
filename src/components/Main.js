@@ -140,7 +140,7 @@ var ConcertPicker = React.createClass({
     return (
       <div>
         <ConcertLists concertLists={this.state.concertLists} newConcert={this.state.newConcert}/>
-        <NewConcertForm onConcertSubmit={this.handleConcertSubmit} concertLists={this.state.concertLists}
+        <NewConcertForm onConcertSubmit={this.handleConcertSubmit}
                         newConcert={this.state.newConcert}/>
       </div>
     );
