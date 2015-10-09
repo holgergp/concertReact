@@ -1,105 +1,21 @@
 require('normalize.css');
 require('styles/App.css');
 
+
 import React from 'react/addons';
 
 let yeomanImage = require('../images/yeoman.png');
 
 
-
-
-
-
-
-
-
-/*var ProductCategoryRow = React.createClass({
-  render: function() {
-    return (<tr><th colSpan="2">{this.props.category}</th></tr>);
-  }
-});
-
-var ProductRow = React.createClass({
-  render: function() {
-    var name = this.props.product.stocked ?
-      this.props.product.name :
-      <span style={{color: 'red'}}>
-                {this.props.product.name}
-            </span>;
-    return (
-      <tr>
-        <td>{name}</td>
-        <td>{this.props.product.price}</td>
-      </tr>
-    );
-  }
-});
-
-var ProductTable = React.createClass({
-  render: function() {
-    var rows = [];
-    var lastCategory = null;
-    this.props.products.forEach(function(product) {
-      if (product.category !== lastCategory) {
-        rows.push(<ProductCategoryRow category={product.category} key={product.category} />);
-      }
-      rows.push(<ProductRow product={product} key={product.name} />);
-      lastCategory = product.category;
-    });
-    return (
-      <table>
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Price</th>
-        </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
-    );
-  }
-});
-
-var SearchBar = React.createClass({
-  render: function() {
-    return (
-      <form>
-        <input type="text" placeholder="Search..." />
-        <p>
-          <input type="checkbox" />
-          {' '}
-          Only show products in stock
-        </p>
-      </form>
-    );
-  }
-});
-
-
-
-var FilterableProductTable = React.createClass({
-  render: function() {
-    return (
-      <div>
-        <SearchBar />
-        <ProductTable products={this.props.products} />
-      </div>
-    );
-  }
-});*/
-
 var Concert = React.createClass({
-  render: function() {
-
+  render: function () {
     return (
-      <div>
-        <div>
+      <div className="col-md-12 btn btn-xs">
+        <div className="col-md-10 col-lg-10 col-sm-10 btn btn-xs bg-warning">
           {this.props.concert.band}
-        </div>
-        <div>
+          -
           {this.props.concert.venue}
-        </div>
-        <div>
+          -
           {this.props.concert.date}
         </div>
       </div>
@@ -108,17 +24,17 @@ var Concert = React.createClass({
 });
 
 var ConcertList = React.createClass({
-  render: function() {
+  render: function () {
     var rows = [];
-    this.props.concertList.concerts.forEach(function(concertIter) {
+    this.props.concertList.concerts.forEach(function (concertIter) {
 
-      rows.push(<Concert concert={concertIter}/>);
+      rows.push(<Concert concert={concertIter} key={concertIter.description}/>);
 
     });
     return (
-      <div>
-        <div>{this.props.concertList.concertType.description}</div>
-        <div>{rows}</div>
+      <div className="panel panel-primary">
+        <div className="panel-heading">{this.props.concertList.concertType.description}</div>
+        <div className="panel-body">{rows}</div>
       </div>
     );
   }
@@ -126,35 +42,36 @@ var ConcertList = React.createClass({
 
 
 var ConcertLists = React.createClass({
-  render: function() {
+  render: function () {
     var columns = [];
-    this.props.concertLists.forEach(function(concertListIter) {
+    this.props.concertLists.forEach(function (concertListIter) {
 
-      columns.push(<ConcertList concertList={concertListIter}/>);
+      columns.push(
+        <div className="col-md-4" key={concertListIter.concertType.id}>
+          <ConcertList concertList={concertListIter}/>
+        </div>
+      );
 
     });
     return (
-        <div>{columns}</div>
+      <div>{columns}</div>
     );
   }
 });
 
 
-
-
 var NewConcertForm = React.createClass({
-  render: function() {
+  render: function () {
     return (
       <form>
-        <input type="text" placeholder="New Concert..." />
-
+        <input type="text" placeholder="New Concert..."/>
       </form>
     );
   }
 });
 
 var ConcertPicker = React.createClass({
-  render: function() {
+  render: function () {
     return (
       <div>
         <ConcertLists concertLists={CONCERTLISTS}/>
@@ -167,7 +84,7 @@ var ConcertPicker = React.createClass({
 
 var CONCERTLISTS = [
   {
-    concertType:  {id:'MAYBE', description:'Vielleicht' },
+    concertType: {id: 'MAYBE', description: 'Vielleicht'},
     concerts: [
       {
         band: 'Slayer',
@@ -176,7 +93,8 @@ var CONCERTLISTS = [
       }
     ]
   },
-  {concertType: {id:'ALL', description:'Alle Konzerte' },
+  {
+    concertType: {id: 'ALL', description: 'Alle Konzerte'},
     concerts: [
       {
         band: 'Kolmogoroth',
@@ -186,7 +104,7 @@ var CONCERTLISTS = [
     ]
   },
   {
-    concertType:  {id:'MUSTGO', description:'Auf jeden Fall hingehen' },
+    concertType: {id: 'MUSTGO', description: 'Auf jeden Fall hingehen'},
     concerts: [
       {
         band: 'Backstreet Boys',
@@ -198,36 +116,24 @@ var CONCERTLISTS = [
 
 ];
 
-
-
-
-var PRODUCTS = [
-  {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
-  {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
-  {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
-  {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
-  {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
-  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
-];
-
-
-//ReactDOM.render(
-//  <FilterableProductTable products={PRODUCTS} />,
-//  document.getElementById('app')
-//);
-
+//Hmmm raff ich das?
 class AppComponent extends React.Component {
   render() {
     return (
       <div className="index">
-        <ConcertPicker />
+        <div className="container-fluid">
+          <div className="row">
+            <ConcertPicker />
+          </div>
+        </div>
       </div>
+
+
 
     );
   }
 }
 
-AppComponent.defaultProps = {
-};
+AppComponent.defaultProps = {};
 
 export default AppComponent;
