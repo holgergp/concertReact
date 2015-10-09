@@ -67,9 +67,13 @@ var ConcertLists = React.createClass({
 var NewConcertForm = React.createClass({
   handleSubmit: function (e) {
     e.preventDefault();
-    var artist = this.refs.artist.value.trim();
-    var venue = this.refs.venue.value.trim();
-    var date = this.refs.date.value.trim();
+
+    var artistNode=React.findDOMNode(this.refs.artist);
+    var artist = artistNode.value.trim();
+    var venueNode=React.findDOMNode(this.refs.venue);
+    var venue = venueNode.value.trim();
+    var dateNode=React.findDOMNode(this.refs.date);
+    var date = dateNode.value.trim();
     if (!artist || !venue || !date) {
       return;
     }
@@ -99,9 +103,9 @@ var NewConcertForm = React.createClass({
               <label className="sr-only">Datum</label>
               <input type="datetime"  placeholder="Datum" required ref="date"/>
             </div>
-            <input
+            <button
               className="btn btn-success glyphicon glyphicon-plus"
-              type="submit"></input>
+              type="submit"></button>
           </form>
         </div>
 
