@@ -12,15 +12,15 @@ var Concert = React.createClass({
     return (
       <div className="col-md-12 btn btn-xs" style={{cursor: 'pointer'}}>
         <div className="col-md-10 col-lg-10 col-sm-10 btn btn-xs bg-warning">
-          {this.props.concert.band}
-         &nbsp;-&nbsp;
+          {this.props.concert.artist}
+          &nbsp;-&nbsp;
           {this.props.concert.venue}
           &nbsp;-&nbsp;
           {this.props.concert.date}
         </div>
         <div class="col-md-2 col-lg-2 col-sm-2">
           <button className="btn btn-xs btn-danger glyphicon glyphicon-remove"
-                  ></button>
+            ></button>
         </div>
       </div>
     );
@@ -65,31 +65,47 @@ var ConcertLists = React.createClass({
 
 
 var NewConcertForm = React.createClass({
+  handleSubmit: function (e) {
+    e.preventDefault();
+    var artist = this.refs.artist.value.trim();
+    var venue = this.refs.venue.value.trim();
+    var date = this.refs.date.value.trim();
+    if (!artist || !venue || !date) {
+      return;
+    }
+    this.props.onConcertSubmit({artist: artist, venue: venue, date: date});
+    this.refs.artist.value = '';
+    this.refs.venue.value = '';
+    this.refs.date.value = '';
+    return;
+  },
+
+
   render: function () {
     return (
       <div className="row">
         <div className="col-md-9">
-          <form name="addConcertForm" noValidate className="form-inline" role="form">
+          <form name="addConcertForm" noValidate className="form-inline" role="form" onSubmit={this.handleSubmit}>
             <div className="form-group">
               <label className="sr-only">Artist</label>
-              <input type="text" name="artist"  placeholder="Künstler"
-                     required/>
-              </div>
-              <div className="form-group">
-                <label className="sr-only">Ort</label>
-                <input type="text" name="venue"  placeholder="Ort" required/>
-                </div>
-                <div className="form-group">
-                  <label className="sr-only">Datum</label>
-                  <input type="datetime" name="date" placeholder="Datum" required/>
-                  </div>
-                  <button
-                          className="btn btn-success glyphicon glyphicon-plus"
-                          type="submit"></button>
-                </form>
-              </div>
-
+              <input type="text" placeholder="Künstler"
+                     required ref="artist"/>
             </div>
+            <div className="form-group">
+              <label className="sr-only">Ort</label>
+              <input type="text"  placeholder="Ort" required ref="venue"/>
+            </div>
+            <div className="form-group">
+              <label className="sr-only">Datum</label>
+              <input type="datetime"  placeholder="Datum" required ref="date"/>
+            </div>
+            <input
+              className="btn btn-success glyphicon glyphicon-plus"
+              type="submit"></input>
+          </form>
+        </div>
+
+      </div>
 
 
     );
@@ -97,11 +113,22 @@ var NewConcertForm = React.createClass({
 });
 
 var ConcertPicker = React.createClass({
+  getInitialState: function () {
+    return {
+      concertLists: CONCERTLISTS,
+      newConcert: {}
+    };
+  },
+  handleConcertSubmit: function (concert) {
+    //FIXME dreckig!
+    this.state.concertLists[1].concerts.push(concert)
+  },
   render: function () {
     return (
       <div>
-        <ConcertLists concertLists={CONCERTLISTS}/>
-        <NewConcertForm />
+        <ConcertLists concertLists={this.state.concertLists} newConcert={this.state.newConcert}/>
+        <NewConcertForm onConcertSubmit={this.handleConcertSubmit} concertLists={this.state.concertLists}
+                        newConcert={this.state.newConcert}/>
       </div>
     );
   }
@@ -113,7 +140,7 @@ var CONCERTLISTS = [
     concertType: {id: 'MAYBE', description: 'Vielleicht'},
     concerts: [
       {
-        band: 'Slayer',
+        artist: 'Slayer',
         venue: 'Duesseldorf Stahlwerk',
         date: '12.02.2016'
       }
@@ -123,7 +150,7 @@ var CONCERTLISTS = [
     concertType: {id: 'ALL', description: 'Alle Konzerte'},
     concerts: [
       {
-        band: 'Kolmogoroth',
+        artist: 'Kolmogoroth',
         venue: 'Köln Blue Shell',
         date: '12.07.2016'
       }
@@ -133,7 +160,7 @@ var CONCERTLISTS = [
     concertType: {id: 'MUSTGO', description: 'Auf jeden Fall hingehen'},
     concerts: [
       {
-        band: 'Backstreet Boys',
+        artist: 'Backstreet Boys',
         venue: 'Mettmann Baumarkt',
         date: '12.01.2016'
       }
@@ -149,7 +176,7 @@ class AppComponent extends React.Component {
       <div className="index">
         <div className="container-fluid">
           <div className="row">
-            <ConcertPicker />
+            <ConcertPicker  />
           </div>
         </div>
       </div>
