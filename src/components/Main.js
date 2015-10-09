@@ -9,7 +9,11 @@ let yeomanImage = require('../images/yeoman.png');
 
 
 
-var ProductCategoryRow = React.createClass({
+
+
+
+
+/*var ProductCategoryRow = React.createClass({
   render: function() {
     return (<tr><th colSpan="2">{this.props.category}</th></tr>);
   }
@@ -71,6 +75,8 @@ var SearchBar = React.createClass({
   }
 });
 
+
+
 var FilterableProductTable = React.createClass({
   render: function() {
     return (
@@ -80,7 +86,119 @@ var FilterableProductTable = React.createClass({
       </div>
     );
   }
+});*/
+
+var Concert = React.createClass({
+  render: function() {
+
+    return (
+      <div>
+        <div>
+          {this.props.concert.band}
+        </div>
+        <div>
+          {this.props.concert.venue}
+        </div>
+        <div>
+          {this.props.concert.date}
+        </div>
+      </div>
+    );
+  }
 });
+
+var ConcertList = React.createClass({
+  render: function() {
+    var rows = [];
+    this.props.concertList.concerts.forEach(function(concertIter) {
+
+      rows.push(<Concert concert={concertIter}/>);
+
+    });
+    return (
+      <div>
+        <div>{this.props.concertList.concertType.description}</div>
+        <div>{rows}</div>
+      </div>
+    );
+  }
+});
+
+
+var ConcertLists = React.createClass({
+  render: function() {
+    var columns = [];
+    this.props.concertLists.forEach(function(concertListIter) {
+
+      columns.push(<ConcertList concertList={concertListIter}/>);
+
+    });
+    return (
+        <div>{columns}</div>
+    );
+  }
+});
+
+
+
+
+var NewConcertForm = React.createClass({
+  render: function() {
+    return (
+      <form>
+        <input type="text" placeholder="New Concert..." />
+
+      </form>
+    );
+  }
+});
+
+var ConcertPicker = React.createClass({
+  render: function() {
+    return (
+      <div>
+        <ConcertLists concertLists={CONCERTLISTS}/>
+        <NewConcertForm />
+      </div>
+    );
+  }
+});
+
+
+var CONCERTLISTS = [
+  {
+    concertType:  {id:'MAYBE', description:'Vielleicht' },
+    concerts: [
+      {
+        band: 'Slayer',
+        venue: 'Duesseldorf Stahlwerk',
+        date: '12.02.2016'
+      }
+    ]
+  },
+  {concertType: {id:'ALL', description:'Alle Konzerte' },
+    concerts: [
+      {
+        band: 'Kolmogoroth',
+        venue: 'Köln Blue Shell',
+        date: '12.07.2016'
+      }
+    ]
+  },
+  {
+    concertType:  {id:'MUSTGO', description:'Auf jeden Fall hingehen' },
+    concerts: [
+      {
+        band: 'Backstreet Boys',
+        venue: 'Mettmann Baumarkt',
+        date: '12.01.2016'
+      }
+    ]
+  }
+
+];
+
+
 
 
 var PRODUCTS = [
@@ -102,7 +220,7 @@ class AppComponent extends React.Component {
   render() {
     return (
       <div className="index">
-        <FilterableProductTable products={PRODUCTS}/>
+        <ConcertPicker />
       </div>
 
     );
