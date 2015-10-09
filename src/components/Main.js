@@ -4,10 +4,17 @@ require('styles/App.css');
 
 import React from 'react/addons';
 
+import lodash from 'lodash';
+
 let yeomanImage = require('../images/yeoman.png');
 
 
 var Concert = React.createClass({
+  handleRemoveConcert: function(e) {
+    e.preventDefault();
+    this.props.onRemoveConcert(this.props.concertType, this.props.concert);
+  },
+
   render: function () {
     return (
       <div className="col-md-12 btn btn-xs" style={{cursor: 'pointer'}}>
@@ -19,7 +26,7 @@ var Concert = React.createClass({
           {this.props.concert.date}
         </div>
         <div className="col-md-2 col-lg-2 col-sm-2">
-          <button className="btn btn-xs btn-danger glyphicon glyphicon-remove"
+          <button className="btn btn-xs btn-danger glyphicon glyphicon-remove" onClick={this.handleRemoveConcert}
             ></button>
         </div>
       </div>
@@ -30,9 +37,11 @@ var Concert = React.createClass({
 var ConcertList = React.createClass({
   render: function () {
     var rows = [];
+    var concertType = this.props.concertType;
+    var removeCallback = this.props.onRemoveConcert;
     this.props.concertList.concerts.forEach(function (concertIter) {
 
-      rows.push(<Concert concert={concertIter} key={concertIter.description}/>);
+      rows.push(<Concert concert={concertIter} concertType={concertType} key={concertIter.description} onRemoveConcert={removeCallback}/>);
 
     });
     return (
@@ -48,11 +57,11 @@ var ConcertList = React.createClass({
 var ConcertLists = React.createClass({
   render: function () {
     var columns = [];
+    var removeCallback = this.props.onRemoveConcert
     this.props.concertLists.forEach(function (concertListIter) {
-
       columns.push(
         <div className="col-md-4" key={concertListIter.concertType.id}>
-          <ConcertList concertList={concertListIter}/>
+          <ConcertList concertList = {concertListIter} concertType = {concertListIter.concertType} onRemoveConcert = {removeCallback}/>
         </div>
       );
 
@@ -123,23 +132,55 @@ var ConcertPicker = React.createClass({
       newConcert: {}
     };
   },
+
+
   handleConcertSubmit: function (concert) {
+
     //FIXME dreckig!
-    var allConcerts = this.state.concertLists[1].concerts;
-    var allConcertsPlusOne = allConcerts.concat([concert]);
+
+    var ALLE_KONZERTE = {id: 'ALL', description: 'Alle Konzerte'};
+    var allConcertList = this.findListForConcertType(ALLE_KONZERTE);
+
+    var allConcertsPlusOne = allConcertList.concerts.concat([concert]);
 
     var allThreeLists = this.state.concertLists;
-    allThreeLists[1].concerts = allConcertsPlusOne;
+    allThreeLists[this.findIndexForConcertList(allConcertList)].concerts = allConcertsPlusOne;
 
     this.setState({
       concertLists: allThreeLists,
       newConcert: {}
     });
   },
+
+  findListForConcertType: function(concertType) {
+    return _.find(this.state.concertLists,function(obj){return obj.concertType.id == concertType.id})
+  },
+
+  findIndexForConcertList: function(concertList) {
+    return _.indexOf(this.state.concertLists, concertList);
+  },
+
+  handleRemoveConcert: function (concertType, concert) {
+    var myList = this.findListForConcertType(concertType);
+    var listWithRemoval = _.remove(myList, function(concertIter) {
+      return concert === concertIter;
+
+    });
+    var allThreeLists = this.state.concertLists;
+    var idx = this.findIndexForConcertList(myList);
+    allThreeLists[idx].concerts = listWithRemoval;
+
+    this.setState({
+      concertLists: allThreeLists,
+      newConcert: {}
+    });
+  },
+
+
   render: function () {
     return (
       <div>
-        <ConcertLists concertLists={this.state.concertLists} newConcert={this.state.newConcert}/>
+        <ConcertLists concertLists={this.state.concertLists} newConcert={this.state.newConcert} onRemoveConcert={this.handleRemoveConcert}/>
         <NewConcertForm onConcertSubmit={this.handleConcertSubmit}
                         newConcert={this.state.newConcert}/>
       </div>
