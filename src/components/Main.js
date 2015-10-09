@@ -18,7 +18,7 @@ var Concert = React.createClass({
           &nbsp;-&nbsp;
           {this.props.concert.date}
         </div>
-        <div class="col-md-2 col-lg-2 col-sm-2">
+        <div className="col-md-2 col-lg-2 col-sm-2">
           <button className="btn btn-xs btn-danger glyphicon glyphicon-remove"
             ></button>
         </div>
@@ -78,9 +78,9 @@ var NewConcertForm = React.createClass({
       return;
     }
     this.props.onConcertSubmit({artist: artist, venue: venue, date: date});
-    this.refs.artist.value = '';
-    this.refs.venue.value = '';
-    this.refs.date.value = '';
+    artistNode.value = '';
+    venueNode.value = '';
+    dateNode.value = '';
     return;
   },
 
@@ -125,7 +125,16 @@ var ConcertPicker = React.createClass({
   },
   handleConcertSubmit: function (concert) {
     //FIXME dreckig!
-    this.state.concertLists[1].concerts.push(concert)
+    var allConcerts = this.state.concertLists[1].concerts;
+    var allConcertsPlusOne = allConcerts.concat([concert]);
+
+    var allThreeLists = this.state.concertLists;
+    allThreeLists[1].concerts = allConcertsPlusOne;
+
+    this.setState({
+      concertLists: allThreeLists,
+      newConcert: {}
+    });
   },
   render: function () {
     return (
