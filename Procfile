@@ -1,1 +1,1 @@
-web: npm start
+web: npm run dist && npm run serve:dist
