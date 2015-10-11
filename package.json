@@ -18,6 +18,9 @@
     "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "release:patch": "npm version patch && npm publish && git push --follow-tags"
   },
+  "engines": {
+    "node": "4"
+  },
   "repository": "",
   "keywords": [],
   "author": "Your name here",
