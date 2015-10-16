@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react-dom';
 import App from './Main';
 
 // Render the main component into the dom
